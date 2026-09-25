@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RELEX BIOSKOP</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #070711;
+      color: white;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(5,5,15,.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid #29294d;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: 900;
+      color: #00eaff;
+      text-shadow: 0 0 15px #00eaff;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 8px;
+    }
+
+    nav a:hover {
+      color: #00eaff;
+    }
+
+    .hero {
+      min-height: 550px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px;
+      background:
+        radial-gradient(circle at center, #24115a, #070711 65%);
+    }
+
+    .hero h1 {
+      font-size: clamp(45px, 8vw, 90px);
+      color: #00eaff;
+      text-shadow: 0 0 30px #00eaff;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 20px auto;
+      color: #ccc;
+      font-size: 18px;
+    }
+
+    .btn {
+      display: inline-block;
+      border: none;
+      padding: 13px 22px;
+      margin: 7px;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(90deg,#00c6ff,#8b2cff);
+      box-shadow: 0 0 18px #5c32ff;
+      font-weight: bold;
+    }
+
+    section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 70px 20px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 35px;
+      color: #00eaff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: linear-gradient(145deg,#121225,#0c0c18);
+      border: 1px solid #292950;
+      border-radius: 18px;
+      overflow: hidden;
+      transition: .3s;
+    }
+
+    .card:hover {
+      transform: translateY(-7px);
+      border-color: #00eaff;
+      box-shadow: 0 0 25px rgba(0,234,255,.25);
+    }
+
+    .poster {
+      height: 290px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 15px;
+      font-size: 27px;
+      font-weight: bold;
+      background: linear-gradient(135deg,#101040,#3b126b);
+      color: #00eaff;
+    }
+
+    .product-img {
+      height: 190px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 65px;
+      background: radial-gradient(circle,#292955,#0c0c18);
+    }
+
+    .content {
+      padding: 18px;
+    }
+
+    .content h3 {
+      margin-bottom: 8px;
+    }
+
+    .content p {
+      color: #aaa;
+      margin: 7px 0;
+      line-height: 1.5;
+    }
+
+    .price {
+      color: #00eaff;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 12px 0;
+    }
+
+    .search {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: 0 auto 30px;
+      padding: 15px;
+      border-radius: 30px;
+      border: 1px solid #444477;
+      background: #10101d;
+      color: white;
+      outline: none;
+    }
+
+    .promo {
+      padding: 25px;
+      border-radius: 18px;
+      background: linear-gradient(135deg,#171744,#32106b);
+      border: 1px solid #45458a;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      background: #04040b;
+      border-top: 1px solid #29294d;
+      color: #999;
+    }
+
+    #cart {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 999;
+      background: linear-gradient(135deg,#00c6ff,#7c2cff);
+      padding: 15px 22px;
+      border-radius: 30px;
+      box-shadow: 0 0 25px #5d2cff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,.8);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 500px;
+      background: #111122;
+      border: 1px solid #00eaff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 40px rgba(0,234,255,.3);
+    }
+
+    .close {
+      float: right;
+      cursor: pointer;
+      font-size: 25px;
+    }
+
+    @media(max-width:700px) {
+      nav {
+        flex-direction: column;
+      }
+
+      nav a {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <nav>
+    <div class="logo">RELEX</div>
+
+    <div>
+      <a href="#home">Home</a>
+      <a href="#film">Film</a>
+      <a href="#food">Food</a>
+      <a href="#promo">Promo</a>
+      <a href="#member">Member</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <div>
+    <h1>RELEX BIOSKOP</h1>
+    <p>
+      Experience Cinema Beyond Reality.
+      Nikmati film favoritmu dengan pengalaman bioskop futuristik.
+    </p>
+
+    <a href="#film" class="btn">Lihat Film</a>
+    <a href="#food" class="btn">Food & Drink</a>
+  </div>
+</div>
+
+<!-- FILM -->
+<section id="film">
+  <h2 class="title">🎬 Film Sedang Tayang</h2>
+
+  <input
+    class="search"
+    id="filmSearch"
+    type="text"
+    placeholder="Cari film..."
+    onkeyup="searchFilm()"
+  >
+
+  <div class="grid" id="filmList"></div>
+</section>
+
+<!-- FOOD -->
+<section id="food">
+  <h2 class="title">🍿 RELEX Food & Drink</h2>
+
+  <div class="grid" id="productList"></div>
+</section>
+
+<!-- PROMO -->
+<section id="promo">
+  <h2 class="title">🔥 Promo RELEX</h2>
+
+  <div class="grid">
+
+    <div class="promo">
+      <h3>RELEX10</h3>
+      <p>Diskon Rp10.000</p>
+      <button class="btn" onclick="usePromo('RELEX10')">
+        Gunakan
+      </button>
+    </div>
+
+    <div class="promo">
+      <h3>MOVIETIME</h3>
+      <p>Diskon 10%</p>
+      <button class="btn" onclick="usePromo('MOVIETIME')">
+        Gunakan
+      </button>
+    </div>
+
+    <div class="promo">
+      <h3>COMBOHEMAT</h3>
+      <p>Diskon Rp15.000 untuk combo tertentu.</p>
+      <button class="btn" onclick="usePromo('COMBOHEMAT')">
+        Gunakan
+      </button>
+    </div>
+
+    <div class="promo">
+      <h3>STUDENT</h3>
+      <p>Harga khusus pelajar.</p>
+      <button class="btn" onclick="usePromo('STUDENT')">
+        Gunakan
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- MEMBER -->
+<section id="member">
+  <h2 class="title">💎 RELEX Member</h2>
+
+  <div class="promo">
+    <h2>Pasha Ghufron</h2>
+    <p>Membership: <b>GOLD</b></p>
+    <p>RELEX Points: <b>2.450</b></p>
+    <p>Total Tiket: <b>18</b></p>
+    <p>Voucher tersedia: <b>3</b></p>
+  </div>
+</section>
+
+<!-- CART BUTTON -->
+<div id="cart" onclick="openCart()">
+  🛒 Keranjang (<span id="cartCount">0</span>)
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <span class="close" onclick="closeModal()">×</span>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<footer>
+  <h2>RELEX BIOSKOP</h2>
+  <p>Experience Cinema Beyond Reality</p>
+  <p>© 2026 RELEX BIOSKOP. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+const films = [
+
+  {
+    title:"NEON CITY",
+    genre:"Action • Sci-Fi",
+    duration:"128 menit",
+    rating:"8.7/10",
+    schedule:"12:30 • 15:00 • 18:30 • 21:00"
+  },
+
+  {
+    title:"THE LAST SIGNAL",
+    genre:"Thriller • Mystery",
+    duration:"116 menit",
+    rating:"8.4/10",
+    schedule:"13:00 • 16:00 • 19:00 • 21:30"
+  },
+
+  {
+    title:"GALAXY RISING",
+    genre:"Sci-Fi • Adventure",
+    duration:"142 menit",
+    rating:"9.1/10",
+    schedule:"12:00 • 15:30 • 19:00 • 21:45"
+  },
+
+  {
+    title:"MIDNIGHT RUN",
+    genre:"Action • Crime",
+    duration:"109 menit",
+    rating:"8.2/10",
+    schedule:"14:00 • 17:00 • 19:30 • 22:00"
+  },
+
+  {
+    title:"THE LOST KINGDOM",
+    genre:"Fantasy • Adventure",
+    duration:"135 menit",
+    rating:"8.8/10",
+    schedule:"11:30 • 14:30 • 17:30 • 20:30"
+  },
+
+  {
+    title:"BEYOND THE OCEAN",
+    genre:"Drama • Adventure",
+    duration:"121 menit",
+    rating:"8.5/10",
+    schedule:"12:45 • 15:45 • 18:45 • 21:15"
+  },
+
+  {
+    title:"SHADOW PROTOCOL",
+    genre:"Action • Spy",
+    duration:"127 menit",
+    rating:"8.9/10",
+    schedule:"13:30 • 16:30 • 19:30 • 22:00"
+  },
+
+  {
+    title:"THE FINAL LETTER",
+    genre:"Drama • Romance",
+    duration:"112 menit",
+    rating:"8.3/10",
+    schedule:"11:00 • 14:00 • 17:00 • 20:00"
+  }
+
+];
+
+const products = [
+
+  ["Classic Popcorn","🍿","Rp25.000"],
+  ["Caramel Popcorn","🍿","Rp30.000"],
+  ["Cheese Popcorn","🍿","Rp30.000"],
+  ["Chocolate Popcorn","🍿","Rp32.000"],
+
+  ["Cola Regular","🥤","Rp20.000"],
+  ["Cola Large","🥤","Rp25.000"],
+  ["Lemon Tea","🍋","Rp22.000"],
+  ["Iced Coffee","☕","Rp28.000"],
+  ["Mineral Water","💧","Rp12.000"],
+
+  ["French Fries","🍟","Rp25.000"],
+  ["Chicken Popcorn","🍗","Rp32.000"],
+  ["Nachos Cheese","🧀","Rp30.000"],
+  ["Churros","🥨","Rp28.000"],
+  ["Chocolate Cookies","🍪","Rp22.000"],
+
+  ["Combo Classic","🍿🥤","Rp45.000"],
+  ["Combo Couple","🍿🍿🥤🥤","Rp75.000"],
+  ["Combo Premium","🍿🧀🥤","Rp85.000"],
+  ["Combo Family","🍿🍿🥤🥤🍟","Rp120.000"],
+
+  ["Chocolate Sundae","🍨","Rp25.000"],
+  ["Caramel Churros Box","🥨","Rp35.000"]
+
+];
+
+let cart = [];
+
+function displayFilms(data = films) {
+
+  const list = document.getElementById("filmList");
+
+  list.innerHTML = data.map((film,index) => `
+
+    <div class="card">
+
+      <div class="poster">
+        ${film.title}
+      </div>
+
+      <div class="content">
+
+        <h3>${film.title}</h3>
+
+        <p>${film.genre}</p>
+
+        <p>⏱ ${film.duration}</p>
+
+        <p>⭐ ${film.rating}</p>
+
+        <p>🕐 ${film.schedule}</p>
+
+        <button class="btn"
+          onclick="bookFilm(${index})">
+          Beli Tiket
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+function displayProducts() {
+
+  const list = document.getElementById("productList");
+
+  list.innerHTML = products.map((product,index) => `
+
+    <div class="card">
+
+      <div class="product-img">
+        ${product[1]}
+      </div>
+
+      <div class="content">
+
+        <h3>${product[0]}</h3>
+
+        <div class="price">${product[2]}</div>
+
+        <button class="btn"
+          onclick="addProduct(${index})">
+          + Tambah
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+function searchFilm() {
+
+  const keyword =
+    document.getElementById("filmSearch").value.toLowerCase();
+
+  const result = films.filter(film =>
+    film.title.toLowerCase().includes(keyword) ||
+    film.genre.toLowerCase().includes(keyword)
+  );
+
+  displayFilms(result);
+
+}
+
+function bookFilm(index) {
+
+  const film = films[index];
+
+  cart.push({
+    name: "Tiket " + film.title,
+    price: 40000
+  });
+
+  updateCart();
+
+  alert(
+    "Tiket " + film.title +
+    " berhasil ditambahkan ke keranjang!"
+  );
+
+}
+
+function addProduct(index) {
+
+  const product = products[index];
+
+  const price =
+    parseInt(product[2]
+    .replace("Rp","")
+    .replace(".",""));
+
+  cart.push({
+    name: product[0],
+    price: price
+  });
+
+  updateCart();
+
+}
+
+function updateCart() {
+
+  document.getElementById("cartCount").innerText =
+    cart.length;
+
+}
+
+function openCart() {
+
+  let total = cart.reduce(
+    (sum,item) => sum + item.price,
+    0
+  );
+
+  document.getElementById("modalContent").innerHTML = `
+
+    <h2>🛒 Keranjang</h2>
+
+    <br>
+
+    ${
+      cart.length === 0
+      ? "<p>Keranjang masih kosong.</p>"
+      : cart.map((item,index) => `
+          <p>
+            ${index+1}.${item.name}
+            <b>Rp${item.price.toLocaleString("id-ID")}</b>
+          </p>
+        `).join("")
+    }
+
+    <hr style="margin:20px 0">
+
+    <h2>
+      Total:
+      Rp${total.toLocaleString("id-ID")}
+    </h2>
+
+    <button class="btn" onclick="checkout()">
+      Checkout
+    </button>
+
+    <button class="btn" onclick="clearCart()">
+      Kosongkan
+    </button>
+
+  `;
+
+  document.getElementById("modal").style.display = "flex";
+
+}
+
+function closeModal() {
+
+  document.getElementById("modal").style.display = "none";
+
+}
+
+function clearCart() {
+
+  cart = [];
+
+  updateCart();
+
+  openCart();
+
+}
+
+function checkout() {
+
+  if(cart.length === 0) {
+
+    alert("Keranjang masih kosong!");
+
+    return;
+
+  }
+
+  alert(
+    "Checkout berhasil dibuat! " +
+    "Ini adalah sistem demo RELEX BIOSKOP."
+  );
+
+}
+
+function usePromo(code) {
+
+  alert(
+    "Kode promo " + code +
+    " berhasil dipilih!"
+  );
+
+}
+
+displayFilms();
+displayProducts();
+
+</script>
+
+</body>
+</html>
